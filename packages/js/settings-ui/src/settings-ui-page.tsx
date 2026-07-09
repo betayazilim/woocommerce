@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { Page } from '@wordpress/admin-ui';
+import { NavigableRegion } from '@wordpress/admin-ui';
 import { Button, Modal, Notice } from '@wordpress/components';
 import {
 	Component,
@@ -433,17 +433,28 @@ const ShellHeader = ( {
 		: undefined;
 
 	return (
-		<Page
-			className="wc-settings-ui-shell"
-			// Labels the region when the header is hidden; the Page runtime
-			// supports ariaLabel but its shipped types do not declare it.
-			{ ...( { ariaLabel: title } as object ) }
-			title={ showHeader ? title : undefined }
-			subTitle={ showHeader ? shell.subtitle : undefined }
-			breadcrumbs={ showHeader ? breadcrumbs : undefined }
-			badges={ showHeader ? badges : undefined }
-			actions={ showHeader ? actions : undefined }
-		>
+		<NavigableRegion className="wc-settings-ui-shell" ariaLabel={ title }>
+			{ showHeader ? (
+				<header className="wc-settings-ui-shell__header">
+					<div className="wc-settings-ui-shell__header-row">
+						{ breadcrumbs }
+						<h2 className="wc-settings-ui-shell__title">
+							{ title }
+						</h2>
+						{ badges }
+						{ actions ? (
+							<div className="wc-settings-ui-shell__header-actions">
+								{ actions }
+							</div>
+						) : null }
+					</div>
+					{ shell.subtitle ? (
+						<p className="wc-settings-ui-shell__subtitle">
+							{ shell.subtitle }
+						</p>
+					) : null }
+				</header>
+			) : null }
 			{ hasNavigation ? (
 				<div className="wc-settings-ui-shell__navigation">
 					{ shell.navigation && shell.navigation.length > 0 ? (
@@ -501,7 +512,7 @@ const ShellHeader = ( {
 				</div>
 			) : null }
 			{ children }
-		</Page>
+		</NavigableRegion>
 	);
 };
 
